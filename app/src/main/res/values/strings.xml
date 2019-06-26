@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MovieBuff</string>
+    <string name="str_loading">Loading</string>
 </resources>

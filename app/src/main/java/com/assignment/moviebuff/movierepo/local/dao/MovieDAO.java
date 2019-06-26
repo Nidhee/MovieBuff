@@ -9,16 +9,18 @@ import com.assignment.moviebuff.movierepo.local.entity.Movie;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface MovieDAO {
 
     @Query("select * from movie_table")
-    List<Movie> getMovies();
+    Observable<List<Movie>> getMovies();
 
     @Insert(onConflict = REPLACE)
-    void insert(Movie movie);
+    void insert(List<Movie> movie);
 
     @Query("UPDATE movie_table SET geners = :geners, production_companies = :productionCompanies WHERE movie_id =:movieId")
     void update(String movieId,String geners,String productionCompanies);

@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.assignment.moviebuff.movierepo.local.dao.MovieDAO;
 import com.assignment.moviebuff.movierepo.local.entity.Movie;
 
-@Database(entities = {Movie.class}, version = 1)
+@Database(entities = {Movie.class}, version = 1 ,exportSchema = false)
 public abstract class MovieRoomDatabase  extends RoomDatabase {
 
     public abstract MovieDAO movieDAO();

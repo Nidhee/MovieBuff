@@ -17,8 +17,8 @@ public class Movie {
     @ColumnInfo(name = "poster_path")
     public String posterPath;
 
-    @ColumnInfo(name = "popularity")
-    public String popularity;
+    @ColumnInfo(name = "vote_average")
+    public Double voteAverage;
 
     @ColumnInfo(name = "release_date")
     public String releaseDate;
@@ -56,12 +56,12 @@ public class Movie {
         this.posterPath = posterPath;
     }
 
-    public String getPopularity() {
-        return popularity;
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setPopularity(String popularity) {
-        this.popularity = popularity;
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getReleaseDate() {
