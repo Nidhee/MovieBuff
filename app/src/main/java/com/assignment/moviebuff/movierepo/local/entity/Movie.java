@@ -1,11 +1,14 @@
 package com.assignment.moviebuff.movierepo.local.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "movie_table")
-public class Movie {
+public class Movie implements Parcelable {
 
     @PrimaryKey
     @ColumnInfo(name = "movie_id")
@@ -26,11 +29,8 @@ public class Movie {
     @ColumnInfo(name = "overview")
     public String overview;
 
-    @ColumnInfo(name = "geners")
-    public String geners;
-
-    @ColumnInfo(name = "production_companies")
-    public String productionCompanies;
+    @ColumnInfo(name = "backdrop_path")
+    public String backdropPath;
 
     public int getMovieId() {
         return movieId;
@@ -80,19 +80,52 @@ public class Movie {
         this.overview = overview;
     }
 
-    public String getGeners() {
-        return geners;
+    public String getBackdropPath() {
+        return backdropPath;
     }
 
-    public void setGeners(String geners) {
-        this.geners = geners;
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
-    public String getProductionCompanies() {
-        return productionCompanies;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setProductionCompanies(String productionCompanies) {
-        this.productionCompanies = productionCompanies;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.movieId);
+        dest.writeString(this.title);
+        dest.writeString(this.posterPath);
+        dest.writeValue(this.voteAverage);
+        dest.writeString(this.releaseDate);
+        dest.writeString(this.overview);
+        dest.writeString(this.backdropPath);
     }
+
+    public Movie() {
+    }
+
+    protected Movie(Parcel in) {
+        this.movieId = in.readInt();
+        this.title = in.readString();
+        this.posterPath = in.readString();
+        this.voteAverage = (Double) in.readValue(Double.class.getClassLoader());
+        this.releaseDate = in.readString();
+        this.overview = in.readString();
+        this.backdropPath = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

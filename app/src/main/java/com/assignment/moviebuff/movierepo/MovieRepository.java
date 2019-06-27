@@ -15,8 +15,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
 
 public class MovieRepository {
@@ -34,16 +34,14 @@ public class MovieRepository {
     public Observable<List<Movie>> getPopularMoviesFromRepo() {
         Log.e("tag","getPopularMovies ");
 
-        final Observable<List<Movie>> movieObservable = readFromDB();
-
-        return movieObservable.flatMap(new Function<List<Movie>, Observable<List<Movie>>>() {
+        final Maybe<List<Movie>> movieObservable = readFromDB();
+        return movieObservable.flatMapObservable(new Function<List<Movie>, Observable<List<Movie>>>() {
             @Override
-            public Observable<List<Movie>> apply(List<Movie> movies) {
-                Log.e("tag","movieListFlowable.flatMap - > apply : " + movies.isEmpty()  + " movies " + movies.size());
-                if (movies.isEmpty()) {
+            public Observable<List<Movie>> apply(List<Movie> movies)  {
+                 if (movies.isEmpty()) {
                     return callAPI();
                 } else {
-                    return Observable.empty();
+                    return movieObservable.toObservable();
                 }
             }
         });
@@ -61,7 +59,7 @@ public class MovieRepository {
     }
 
     private List<Movie> saveToDB(MoviesParser moviesParser) {
-        Log.e("tag","saveToDB ");
+        Log.e("tag","saveToDB");
         List<Movie> movieList = new ArrayList<>();
         for (ResultParser resultParser : moviesParser.getResultParsers()) {
             Movie movie = new Movie();
@@ -70,6 +68,8 @@ public class MovieRepository {
             movie.setVoteAverage(resultParser.getVoteAverage());
             movie.setPosterPath(resultParser.getPosterPath());
             movie.setReleaseDate(resultParser.getReleaseDate());
+            movie.setBackdropPath(resultParser.getBackdropPath());
+            movie.setOverview(resultParser.getOverview());
             movieList.add(movie);
         }
         movieDatabase.movieDAO().insert(movieList);
@@ -77,10 +77,8 @@ public class MovieRepository {
     }
 
 
-    private Observable<List<Movie>> readFromDB() {
-        Log.e("tag","readFromDB ");
-        Observable<List<Movie>> observable = movieDatabase.movieDAO().getMovies();
-        Log.e("tag","readFromDB observable ");
-        return observable;
+    private Maybe<List<Movie>> readFromDB() {
+        Log.e("tag","readFromDB");
+        return movieDatabase.movieDAO().getMovies();
     }
 }

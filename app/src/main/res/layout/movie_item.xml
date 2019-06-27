@@ -7,16 +7,18 @@
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
     android:layout_marginTop="5dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/black">
 
     <ImageView
         android:id="@+id/imgMoviePoster"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:background="@color/colorAccent"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_launcher_background" />
+        app:srcCompat="@drawable/ic_launcher_background"
+        android:transitionName="poster"
+        />
 
 
     <LinearLayout
@@ -32,15 +34,8 @@
             tools:text="Movie title"
             android:textSize="16sp"
             android:layout_weight="2"
-            android:textStyle="bold"/>
-
-        <ImageView
-            android:id="@+id/imgStar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_star"
-            android:layout_gravity="center"
-            android:layout_marginEnd="4dp"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:id="@+id/tvVoteAverage"
@@ -49,7 +44,10 @@
             tools:text="Vote Average"
             android:textSize="14sp"
             android:layout_gravity="center"
-            android:gravity="right"/>
+            android:gravity="end"
+            android:textColor="@android:color/white"
+            android:drawableEnd="@drawable/ic_star"/>
+
     </LinearLayout>
 
 </LinearLayout>
