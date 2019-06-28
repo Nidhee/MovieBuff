@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -23,17 +22,13 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
-
-
 public class MainActivity extends AppCompatActivity {
-
-    private static final String MOVIE_ARG = "Movie";
-    MovieViewModel movieViewModel;
-
     @Inject
     MovieViewModelFactory movieViewModelFactory;
 
+    private static final String MOVIE_ARG = "Movie";
+
+    MovieViewModel movieViewModel;
     LinearLayout llProgress;
     RecyclerView rvMovieList;
     MovieAdapter movieAdapter;
@@ -41,15 +36,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        Log.e("tag", "onCreate ");
+        ((MyApplication) getApplication()).getMovieComponent().inject(this);
+
         llProgress = findViewById(R.id.movieListprogressLayout);
         rvMovieList = findViewById(R.id.rvMovieList);
 
-        ((MyApplication) getApplication()).getMovieComponent().inject(this);
-
         movieViewModel = ViewModelProviders.of(this, movieViewModelFactory).get(MovieViewModel.class);
-
         rvMovieList.setLayoutManager(new GridLayoutManager(this, 2));
         movieAdapter = new MovieAdapter(this);
 
@@ -58,10 +52,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
                 // Item click navigate to detail activity
                 Movie movie = movieViewModel.getMovieArrayList().getValue().get(position);
-
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(MOVIE_ARG,movie);
-                Intent intent = new Intent(MainActivity.this,MovieDetailActivity.class);
+                bundle.putParcelable(MOVIE_ARG, movie);
+                Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
 

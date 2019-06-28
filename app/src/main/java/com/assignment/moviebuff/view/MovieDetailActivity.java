@@ -1,31 +1,25 @@
 package com.assignment.moviebuff.view;
 
 import android.os.Bundle;
-
-import com.assignment.moviebuff.BuildConfig;
-import com.assignment.moviebuff.movierepo.local.entity.Movie;
-import com.assignment.moviebuff.viewmodel.MovieViewModel;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.assignment.moviebuff.BuildConfig;
 import com.assignment.moviebuff.R;
+import com.assignment.moviebuff.movierepo.local.entity.Movie;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class MovieDetailActivity extends AppCompatActivity {
-
     private static final String MOVIE_ARG = "Movie";
 
-    ImageView ivBackdrop,ivPoster;
-    TextView tvTitle,tvVoteAverage,tvOverview;
+    ImageView ivBackdrop, ivPoster;
+    TextView tvTitle, tvVoteAverage, tvOverview;
     private Movie movie;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,17 +30,24 @@ public class MovieDetailActivity extends AppCompatActivity {
         tvVoteAverage = findViewById(R.id.tvVoteAverage);
         tvOverview = findViewById(R.id.tvOverview);
 
-        movie = getIntent().getExtras().getParcelable(MOVIE_ARG);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            movie = bundle.getParcelable(MOVIE_ARG);
+        }
+
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateUI();
+        updateViews();
     }
 
-    private void updateUI(){
-        if(movie!=null) {
+    private void updateViews() {
+        if (movie != null) {
 
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
@@ -54,11 +55,13 @@ public class MovieDetailActivity extends AppCompatActivity {
             Glide.with(this)
                     .load(BuildConfig.IMAGE_URL + "w500" + movie.getBackdropPath())
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .placeholder(R.drawable.placeholder_backdrop)
                     .into(ivBackdrop);
 
             Glide.with(this)
-                    .load(BuildConfig.IMAGE_URL + "w500" + movie.getPosterPath())
+                    .load(BuildConfig.IMAGE_URL + "w300" + movie.getPosterPath())
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .placeholder(R.drawable.placeholder_poster)
                     .into(ivPoster);
         }
     }

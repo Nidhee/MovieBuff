@@ -23,7 +23,6 @@ public class MovieRepository {
 
     @Inject
     MovieRoomDatabase movieDatabase;
-
     @Inject
     MovieService movieService;
 
@@ -75,7 +74,6 @@ public class MovieRepository {
         movieDatabase.movieDAO().insert(movieList);
         return movieList;
     }
-
 
     private Maybe<List<Movie>> readFromDB() {
         Log.e("tag","readFromDB");

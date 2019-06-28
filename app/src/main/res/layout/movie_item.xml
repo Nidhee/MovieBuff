@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="5dp"
-    android:layout_marginEnd="5dp"
-    android:layout_marginTop="5dp"
-    android:orientation="vertical"
-    android:background="@android:color/black">
+    android:layout_margin="@dimen/normal"
+    android:background="@android:color/black"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/imgMoviePoster"
@@ -16,37 +14,36 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_launcher_background"
-        android:transitionName="poster"
-        />
+        app:srcCompat="@drawable/ic_launcher_background" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/normal_large"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvMovieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Movie title"
-            android:textSize="16sp"
             android:layout_weight="2"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_large"
             android:textStyle="bold"
-            android:textColor="@android:color/white"/>
+            tools:text="Movie title" />
 
         <TextView
             android:id="@+id/tvVoteAverage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Vote Average"
-            android:textSize="14sp"
             android:layout_gravity="center"
+            android:drawableEnd="@drawable/ic_star"
+            android:drawablePadding="2dp"
             android:gravity="end"
             android:textColor="@android:color/white"
-            android:drawableEnd="@drawable/ic_star"/>
+            android:textSize="@dimen/text_normal"
+            tools:text="Vote Average" />
 
     </LinearLayout>
 

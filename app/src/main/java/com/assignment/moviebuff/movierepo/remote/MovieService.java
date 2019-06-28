@@ -10,6 +10,6 @@ public interface MovieService {
 
     @GET("movie/popular?")
     Observable<MoviesParser> getPopularMoviesFromRemote(@Query("api_key") String api_key,
-                                              @Query("language") String language,
+                                                        @Query("language") String language,
                                                         @Query("page") String page);
 }

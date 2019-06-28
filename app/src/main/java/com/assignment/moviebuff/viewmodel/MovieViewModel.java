@@ -20,23 +20,23 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MovieViewModel extends ViewModel {
 
-    MutableLiveData<ArrayList<Movie>> movieArrayList;
-
+    private MutableLiveData<ArrayList<Movie>> movieArrayList;
     private MovieRepository movieRepository;
 
     MovieViewModel(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
+
     public MutableLiveData<ArrayList<Movie>> getMovieArrayList(){
         if(movieArrayList==null) {
-            movieArrayList = new  MutableLiveData<ArrayList<Movie>>();
+            movieArrayList = new MutableLiveData<>();
             fetchMovieList();
         }
         return movieArrayList;
     }
-    public void fetchMovieList() {
 
-        Log.e("tag","fetchMovieList");
+    private void fetchMovieList() {
+
         Observable<List<Movie>> observable = movieRepository.getPopularMoviesFromRepo();
          observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -62,7 +62,5 @@ public class MovieViewModel extends ViewModel {
                         Log.e("tag","onComplete");
                     }
                 });
-
     }
-
 }

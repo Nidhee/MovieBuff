@@ -12,7 +12,7 @@ public class MovieViewModelFactory implements ViewModelProvider.Factory {
     MovieRepository movieRepository;
 
     @Inject
-    public MovieViewModelFactory(){ }
+    MovieViewModelFactory(){ }
 
     @NonNull
     @Override

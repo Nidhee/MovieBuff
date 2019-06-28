@@ -19,10 +19,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-
     private ArrayList<Movie> movieArrayList;
     private Context context;
-    private RecyclerViewClickListener mlistener;
+    private RecyclerViewClickListener listener;
+
     MovieAdapter(Context context) {
         this.context = context;
     }
@@ -31,26 +31,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movieArrayList = movieArrayList;
     }
     void setListener(RecyclerViewClickListener listener){
-        this.mlistener = listener;
+        this.listener = listener;
     }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View movieView = layoutInflater.inflate(R.layout.movie_item, parent, false);
-        MovieViewHolder movieViewHolder = new MovieViewHolder(movieView,mlistener);
+        MovieViewHolder movieViewHolder = new MovieViewHolder(movieView, listener);
         return movieViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-
         Movie movie = movieArrayList.get(position);
         holder.tvMovieTitle.setText(movie.getTitle());
         holder.tvVoteAverage.setText(String.valueOf(movie.getVoteAverage()));
         Glide.with(context)
-                .load(BuildConfig.IMAGE_URL + "w500" + movie.getPosterPath())
-                .placeholder(R.drawable.ic_movie_black)
+                .load(BuildConfig.IMAGE_URL + "w300" + movie.getPosterPath())
+                .placeholder(R.drawable.placeholder_poster)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(holder.imgMoviePoster);
 
@@ -73,7 +73,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             tvVoteAverage = view.findViewById(R.id.tvVoteAverage);
             imgMoviePoster = view.findViewById(R.id.imgMoviePoster);
             this.listener = listener;
-            view.setOnClickListener(this);
+            imgMoviePoster.setOnClickListener(this);
         }
 
         @Override
@@ -85,5 +85,4 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public interface RecyclerViewClickListener {
         void onClick(View view, int position);
     }
-
 }

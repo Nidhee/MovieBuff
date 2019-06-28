@@ -7,10 +7,7 @@ import com.assignment.moviebuff.MyApplication;
 import com.assignment.moviebuff.movierepo.MovieRepository;
 import com.assignment.moviebuff.movierepo.local.MovieRoomDatabase;
 import com.assignment.moviebuff.movierepo.remote.MovieService;
-import com.assignment.moviebuff.view.MovieAdapter;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-
-import javax.inject.Inject;
 
 import dagger.Module;
 import dagger.Provides;
