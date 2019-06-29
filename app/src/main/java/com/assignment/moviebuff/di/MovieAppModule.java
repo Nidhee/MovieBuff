@@ -18,11 +18,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class MovieModule {
+public class MovieAppModule {
 
     private final MyApplication myApplication;
 
-    public MovieModule(MyApplication myApplication) {
+    public MovieAppModule(MyApplication myApplication) {
         this.myApplication = myApplication;
     }
 
@@ -39,7 +39,6 @@ public class MovieModule {
     }
 
     @Provides
-
     MovieService providesMovieService(Retrofit retrofit){
         return retrofit.create(MovieService.class);
     }

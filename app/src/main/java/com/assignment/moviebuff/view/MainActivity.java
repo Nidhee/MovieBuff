@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.assignment.moviebuff.MyApplication;
 import com.assignment.moviebuff.R;
+import com.assignment.moviebuff.di.MovieScreenModule;
 import com.assignment.moviebuff.movierepo.MovieResult;
 import com.assignment.moviebuff.movierepo.local.entity.Movie;
 import com.assignment.moviebuff.viewmodel.MovieViewModel;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnRetry;
     TextView txtErrorMessage;
 
+    @Inject
     MovieAdapter movieAdapter;
 
     @Override
@@ -43,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        ((MyApplication) getApplication()).getMovieComponent().inject(this);
-
+       ((MyApplication) getApplication()).getMovieComponent().addMovieScreenComponent(new MovieScreenModule(MainActivity.this)).inject(MainActivity.this);
         llProgress = findViewById(R.id.movieListprogressLayout);
         rvMovieList = findViewById(R.id.rvMovieList);
         llError = findViewById(R.id.errorLayout);
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         movieViewModel = ViewModelProviders.of(this, movieViewModelFactory).get(MovieViewModel.class);
         rvMovieList.setLayoutManager(new GridLayoutManager(this, 2));
-        movieAdapter = new MovieAdapter(this);
+        // movieAdapter = new MovieAdapter(this);
 
         movieAdapter.setListener(new MovieAdapter.RecyclerViewClickListener() {
             @Override

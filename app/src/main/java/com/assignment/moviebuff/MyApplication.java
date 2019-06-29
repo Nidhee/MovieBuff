@@ -2,22 +2,22 @@ package com.assignment.moviebuff;
 
 import android.app.Application;
 
-import com.assignment.moviebuff.di.DaggerMovieComponent;
-import com.assignment.moviebuff.di.MovieComponent;
-import com.assignment.moviebuff.di.MovieModule;
+import com.assignment.moviebuff.di.DaggerMovieAppComponent;
+import com.assignment.moviebuff.di.MovieAppComponent;
+import com.assignment.moviebuff.di.MovieAppModule;
 
 public class MyApplication extends Application {
 
-    private MovieComponent movieComponent;
+    private MovieAppComponent movieComponent;
 
-    public MovieComponent getMovieComponent(){
+    public MovieAppComponent getMovieComponent(){
         return movieComponent;
     }
 
     @Override public void onCreate() {
         super.onCreate();
-        movieComponent = DaggerMovieComponent.builder()
-                .movieModule(new MovieModule(this))
+        movieComponent = DaggerMovieAppComponent.builder()
+                .movieAppModule(new MovieAppModule(this))
                 .build();
        }
 }
