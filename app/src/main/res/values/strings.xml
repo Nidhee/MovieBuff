@@ -2,4 +2,7 @@
     <string name="app_name">MovieBuff</string>
     <string name="str_loading">Loading</string>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="str_error_cant_reach_server">Can\'t reach server at the moment</string>
+    <string name="str_error_something_went_wrong">Something went wrong, try again later.</string>
+    <string name="str_retry">Retry</string>
 </resources>

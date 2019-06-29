@@ -1,5 +1,4 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="tiny">2dp</dimen>
     <dimen name="small">4dp</dimen>
@@ -15,5 +14,5 @@
     <dimen name="text_larger">18sp</dimen>
     <dimen name="text_largest">24sp</dimen>
 
-    <dimen name="poster_nagative_margin">-120dp</dimen>
+    <dimen name="poster_negative_margin">-120dp</dimen>
 </resources>

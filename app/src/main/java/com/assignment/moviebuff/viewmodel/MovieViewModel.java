@@ -5,13 +5,16 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.assignment.moviebuff.movierepo.APIErrorParser;
 import com.assignment.moviebuff.movierepo.MovieRepository;
+import com.assignment.moviebuff.movierepo.MovieResult;
 import com.assignment.moviebuff.movierepo.local.entity.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Flowable;
+import javax.net.ssl.SSLHandshakeException;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,46 +23,52 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MovieViewModel extends ViewModel {
 
-    private MutableLiveData<ArrayList<Movie>> movieArrayList;
     private MovieRepository movieRepository;
+    private MutableLiveData<MovieResult> movieResultMutableLiveData;
 
     MovieViewModel(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
+        movieResultMutableLiveData = new MutableLiveData<>();
     }
 
-    public MutableLiveData<ArrayList<Movie>> getMovieArrayList(){
-        if(movieArrayList==null) {
-            movieArrayList = new MutableLiveData<>();
-            fetchMovieList();
-        }
-        return movieArrayList;
+    public MutableLiveData<MovieResult> getMovieResult() {
+        fetchMovieList();
+        return movieResultMutableLiveData;
     }
 
     private void fetchMovieList() {
-
+        final MovieResult movieResult = new MovieResult();
         Observable<List<Movie>> observable = movieRepository.getPopularMoviesFromRepo();
-         observable.subscribeOn(Schedulers.io())
+        observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Movie>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.e("tag","onSubscribe");
+                        Log.e("tag", "onSubscribe");
                     }
 
                     @Override
                     public void onNext(List<Movie> movies) {
-                        Log.e("tag","onNext " + movies.size());
-                         movieArrayList.setValue((ArrayList<Movie>) movies);
+                        Log.e("tag", "onNext " + movies.size());
+                        movieResult.setMovieList((ArrayList<Movie>) movies);
+                        movieResultMutableLiveData.setValue(movieResult);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("tag","onError " + e.getLocalizedMessage());
+                        APIErrorParser apiErrorParser = new APIErrorParser();
+                        if (e instanceof SSLHandshakeException) {
+                            apiErrorParser.setErrorCode(0);
+                        } else {
+                            apiErrorParser.setErrorCode(1);
+                        }
+                        movieResult.setApiErrorParser(apiErrorParser);
+                        movieResultMutableLiveData.setValue(movieResult);
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.e("tag","onComplete");
+                        Log.e("tag", "onComplete");
                     }
                 });
     }

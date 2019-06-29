@@ -9,6 +9,7 @@ import com.assignment.moviebuff.movierepo.local.MovieRoomDatabase;
 import com.assignment.moviebuff.movierepo.remote.MovieService;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -25,17 +26,20 @@ public class MovieModule {
         this.myApplication = myApplication;
     }
 
+
     @Provides
-    Context providesContext(){
+    Context providesApplicationContext(){
         return this.myApplication;
     }
 
     @Provides
+
     MovieRepository providesMovieRepository(){
         return new MovieRepository(myApplication);
     }
 
     @Provides
+
     MovieService providesMovieService(Retrofit retrofit){
         return retrofit.create(MovieService.class);
     }
