@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-       ((MyApplication) getApplication()).getMovieComponent().addMovieScreenComponent(new MovieScreenModule(MainActivity.this)).inject(MainActivity.this);
+        ((MyApplication) getApplication()).getMovieComponent().addMovieScreenComponent(new MovieScreenModule(MainActivity.this)).inject(MainActivity.this);
+
         llProgress = findViewById(R.id.movieListprogressLayout);
         rvMovieList = findViewById(R.id.rvMovieList);
         llError = findViewById(R.id.errorLayout);
@@ -54,19 +55,19 @@ public class MainActivity extends AppCompatActivity {
 
         movieViewModel = ViewModelProviders.of(this, movieViewModelFactory).get(MovieViewModel.class);
         rvMovieList.setLayoutManager(new GridLayoutManager(this, 2));
-        // movieAdapter = new MovieAdapter(this);
 
         movieAdapter.setListener(new MovieAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View view, int position) {
                 // Item click navigate to detail activity
-                Movie movie = movieViewModel.getMovieResult().getValue().getMovieList().get(position);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(MOVIE_ARG, movie);
-                Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-
+                Movie movie = movieViewModel.getMovieAtPostion(position);
+                if (movie != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(MOVIE_ARG, movie);
+                    Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
         rvMovieList.setAdapter(movieAdapter);
@@ -74,18 +75,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getMovies();
+                btnRetry.setEnabled(false);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e("tag", "onResume ");
 
         getMovies();
     }
-    private void getMovies(){
+
+    private void getMovies() {
         llProgress.setVisibility(View.VISIBLE);
         rvMovieList.setVisibility(View.GONE);
         llError.setVisibility(View.GONE);
@@ -93,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         movieViewModel.getMovieResult().observe(this, new Observer<MovieResult>() {
             @Override
             public void onChanged(MovieResult movieResult) {
+
+                btnRetry.setEnabled(true);
+
                 if (movieResult.getMovieList() != null) {
                     Log.e("tag", "onChanged() called with: movies = [" + movieResult.getMovieList().size() + "]");
                     // Update UI
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     rvMovieList.setVisibility(View.GONE);
                     llProgress.setVisibility(View.GONE);
                     llError.setVisibility(View.VISIBLE);
-                    switch (movieResult.getApiErrorParser().getErrorCode()){
+                    switch (movieResult.getApiErrorParser().getErrorCode()) {
                         case 0:
                             txtErrorMessage.setText(getString(R.string.str_error_cant_reach_server));
                             break;

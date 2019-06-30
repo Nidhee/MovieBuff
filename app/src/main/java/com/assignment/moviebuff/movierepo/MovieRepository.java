@@ -3,7 +3,6 @@ package com.assignment.moviebuff.movierepo;
 import android.util.Log;
 
 import com.assignment.moviebuff.BuildConfig;
-import com.assignment.moviebuff.MyApplication;
 import com.assignment.moviebuff.movierepo.local.MovieRoomDatabase;
 import com.assignment.moviebuff.movierepo.local.entity.Movie;
 import com.assignment.moviebuff.movierepo.remote.MovieService;
@@ -21,23 +20,24 @@ import io.reactivex.functions.Function;
 
 public class MovieRepository {
 
-    @Inject
-    MovieRoomDatabase movieDatabase;
-    @Inject
-    MovieService movieService;
 
-    public MovieRepository(MyApplication myApplication) {
-        myApplication.getMovieComponent().inject(this);
+    private MovieRoomDatabase movieDatabase;
+    private MovieService movieService;
+
+    @Inject
+    public MovieRepository(MovieRoomDatabase movieDatabase, MovieService movieService) {
+        this.movieDatabase = movieDatabase;
+        this.movieService = movieService;
     }
 
     public Observable<List<Movie>> getPopularMoviesFromRepo() {
-        Log.e("tag","getPopularMovies ");
+        Log.e("tag", "getPopularMovies ");
 
         final Maybe<List<Movie>> movieObservable = readFromDB();
         return movieObservable.flatMapObservable(new Function<List<Movie>, Observable<List<Movie>>>() {
             @Override
-            public Observable<List<Movie>> apply(List<Movie> movies)  {
-                 if (movies.isEmpty()) {
+            public Observable<List<Movie>> apply(List<Movie> movies) {
+                if (movies.isEmpty()) {
                     return callAPI();
                 } else {
                     return movieObservable.toObservable();
@@ -47,18 +47,19 @@ public class MovieRepository {
     }
 
     private Observable<List<Movie>> callAPI() {
-        Log.e("tag","callAPI ");
+        Log.e("tag", "callAPI ");
         return movieService.getPopularMoviesFromRemote(BuildConfig.API_KEY, "en-US", "1")
                 .flatMap(new Function<MoviesParser, Observable<List<Movie>>>() {
                     @Override
-                    public Observable<List<Movie>> apply(MoviesParser moviesParser)  {
-                        return  Observable.just(saveToDB(moviesParser));
+                    public Observable<List<Movie>> apply(MoviesParser moviesParser) {
+                        saveToDB(moviesParser);
+                        return readFromDB().toObservable();
                     }
                 });
     }
 
-    private List<Movie> saveToDB(MoviesParser moviesParser) {
-        Log.e("tag","saveToDB");
+    private void saveToDB(MoviesParser moviesParser) {
+        Log.e("tag", "saveToDB");
         List<Movie> movieList = new ArrayList<>();
         for (ResultParser resultParser : moviesParser.getResultParsers()) {
             Movie movie = new Movie();
@@ -72,11 +73,10 @@ public class MovieRepository {
             movieList.add(movie);
         }
         movieDatabase.movieDAO().insert(movieList);
-        return movieList;
     }
 
     private Maybe<List<Movie>> readFromDB() {
-        Log.e("tag","readFromDB");
+        Log.e("tag", "readFromDB");
         return movieDatabase.movieDAO().getMovies();
     }
 }

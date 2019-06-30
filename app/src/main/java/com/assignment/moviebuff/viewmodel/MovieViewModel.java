@@ -36,6 +36,12 @@ public class MovieViewModel extends ViewModel {
         return movieResultMutableLiveData;
     }
 
+    public Movie getMovieAtPostion(int position) {
+        if(movieResultMutableLiveData.getValue().getMovieList()!=null)
+         return movieResultMutableLiveData.getValue().getMovieList().get(position);
+        return null;
+    }
+
     private void fetchMovieList() {
         final MovieResult movieResult = new MovieResult();
         Observable<List<Movie>> observable = movieRepository.getPopularMoviesFromRepo();

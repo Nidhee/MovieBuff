@@ -1,14 +1,14 @@
 package com.assignment.moviebuff.di;
 
 import android.content.Context;
-
 import com.assignment.moviebuff.BuildConfig;
 import com.assignment.moviebuff.MyApplication;
-import com.assignment.moviebuff.movierepo.MovieRepository;
 import com.assignment.moviebuff.movierepo.local.MovieRoomDatabase;
 import com.assignment.moviebuff.movierepo.remote.MovieService;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -26,28 +26,25 @@ public class MovieAppModule {
         this.myApplication = myApplication;
     }
 
-
     @Provides
     Context providesApplicationContext(){
         return this.myApplication;
     }
 
     @Provides
-
-    MovieRepository providesMovieRepository(){
-        return new MovieRepository(myApplication);
-    }
-
-    @Provides
+    @Singleton
     MovieService providesMovieService(Retrofit retrofit){
         return retrofit.create(MovieService.class);
     }
+
     @Provides
+    @Singleton
     MovieRoomDatabase providesMovieRoomDatabase(){
        return MovieRoomDatabase.getDatabase(myApplication.getApplicationContext());
     }
 
     @Provides
+    @Singleton
     Retrofit providesRetrofitClient(){
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

@@ -1,12 +1,11 @@
 package com.assignment.moviebuff.di;
 
-import com.assignment.moviebuff.movierepo.MovieRepository;
-import dagger.Component;
 
+import javax.inject.Singleton;
+
+import dagger.Component;
+@Singleton
 @Component(modules = MovieAppModule.class)
 public interface MovieAppComponent {
-
-    void inject(MovieRepository movieRepository);
-
     MovieScreenComponent addMovieScreenComponent(MovieScreenModule movieScreenModule);
 }
