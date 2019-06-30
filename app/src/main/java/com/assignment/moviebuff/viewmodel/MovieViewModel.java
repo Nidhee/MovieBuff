@@ -36,9 +36,14 @@ public class MovieViewModel extends ViewModel {
         return movieResultMutableLiveData;
     }
 
+    public void refetchMovieResult(){
+        fetchMovieList();
+    }
+
     public Movie getMovieAtPostion(int position) {
-        if(movieResultMutableLiveData.getValue().getMovieList()!=null)
-         return movieResultMutableLiveData.getValue().getMovieList().get(position);
+        if (movieResultMutableLiveData.getValue().getMovieList() != null) {
+            return movieResultMutableLiveData.getValue().getMovieList().get(position);
+        }
         return null;
     }
 
@@ -62,6 +67,7 @@ public class MovieViewModel extends ViewModel {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e("tag", "onError() called with: e = [" + e + "]");
                         APIErrorParser apiErrorParser = new APIErrorParser();
                         if (e instanceof SSLHandshakeException) {
                             apiErrorParser.setErrorCode(0);

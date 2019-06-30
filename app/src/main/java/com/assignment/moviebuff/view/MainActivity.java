@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         ((MyApplication) getApplication()).getMovieComponent().addMovieScreenComponent(new MovieScreenModule(MainActivity.this)).inject(MainActivity.this);
@@ -74,23 +73,24 @@ public class MainActivity extends AppCompatActivity {
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getMovies();
+
                 btnRetry.setEnabled(false);
+                llError.setVisibility(View.GONE);
+                llProgress.setVisibility(View.VISIBLE);
+                rvMovieList.setVisibility(View.GONE);
+
+                movieViewModel.refetchMovieResult();
+
             }
         });
-
-        getMovies();
+        fetchMovies();
     }
 
-    private void getMovies() {
-        llProgress.setVisibility(View.VISIBLE);
-        rvMovieList.setVisibility(View.GONE);
-        llError.setVisibility(View.GONE);
-
+    private void fetchMovies() {
         movieViewModel.getMovieResult().observe(this, new Observer<MovieResult>() {
             @Override
             public void onChanged(MovieResult movieResult) {
-
+                Log.e("tag", "onChanged() called with: movieResult = [" + movieResult + "]");
                 btnRetry.setEnabled(true);
 
                 if (movieResult.getMovieList() != null) {
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     rvMovieList.setVisibility(View.VISIBLE);
                     llProgress.setVisibility(View.GONE);
                     llError.setVisibility(View.GONE);
+
                     movieAdapter.setData(movieResult.getMovieList());
                 } else {
                     rvMovieList.setVisibility(View.GONE);
