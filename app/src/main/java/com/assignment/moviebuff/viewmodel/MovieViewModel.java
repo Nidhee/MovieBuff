@@ -32,16 +32,19 @@ public class MovieViewModel extends ViewModel {
     }
 
     public MutableLiveData<MovieResult> getMovieResult() {
-        fetchMovieList();
+        if (movieResultMutableLiveData.getValue() == null ||
+                movieResultMutableLiveData.getValue().getMovieList().isEmpty()) {
+            fetchMovieList();
+        }
         return movieResultMutableLiveData;
     }
 
-    public void refetchMovieResult(){
+    public void refetchMovieResult() {
         fetchMovieList();
     }
 
     public Movie getMovieAtPostion(int position) {
-        if (movieResultMutableLiveData.getValue().getMovieList() != null) {
+        if (movieResultMutableLiveData.getValue() != null && movieResultMutableLiveData.getValue().getMovieList() != null) {
             return movieResultMutableLiveData.getValue().getMovieList().get(position);
         }
         return null;
